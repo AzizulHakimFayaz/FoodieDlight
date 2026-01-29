@@ -4,10 +4,10 @@ import '../constants/dummy_data.dart';
 import '../widgets/custom_nav_bar.dart';
 import '../widgets/food_card.dart';
 import '../widgets/footer.dart';
-import '../widgets/background_pattern.dart';
 import '../models/food_item.dart';
 import '../models/cart_item.dart';
 import 'order_details_page.dart';
+import '../widgets/background_pattern.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -69,6 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: BackgroundPattern(
         child: Column(
           children: [
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildHeroSection(),
-                          _buildCategoryList(),
+                          _buildCategoryFilter(), // Pill shaped
                           _buildFoodSections(),
                           const SizedBox(height: 60),
                           const Footer(),
@@ -112,106 +113,98 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildHeroSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.location_on, color: AppColors.primary),
-              const SizedBox(width: 8),
-              const Text(
-                'DELIVER TO',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 40),
+      height: 300,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey[900], // Fallback color
+        borderRadius: BorderRadius.circular(30),
+        image: const DecorationImage(
+          image: NetworkImage(
+            'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
+          ), // Dark food background
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black45,
+            BlendMode.darken,
+          ), // Darken image for text readability
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Craving something?',
+              style: TextStyle(
+                fontSize: 48,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: -1,
+                fontFamily:
+                    'Poppins', // Assuming font family is available or defaults
               ),
-              const SizedBox(width: 8),
-              Text(
-                'New York, NY',
-                style: TextStyle(color: AppColors.textPrimary),
-              ),
-              const SizedBox(width: 4),
-              Icon(Icons.keyboard_arrow_down, color: AppColors.primary),
-            ],
-          ),
-          const SizedBox(height: 24),
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
-              ),
-              children: [
-                TextSpan(
-                  text: 'Craving something\n',
-                  style: TextStyle(color: AppColors.textPrimary),
-                ),
-                TextSpan(
-                  text: 'delicious?',
-                  style: TextStyle(color: AppColors.primary),
-                ),
-              ],
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 32),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+            const SizedBox(height: 8),
+            const Text(
+              'Let\'s get you fed with the best in town.',
+              style: TextStyle(fontSize: 16, color: Colors.white70),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              width: 500,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Icon(Icons.search, color: Colors.grey),
                   ),
-                  child: TextField(
-                    onChanged: (value) => setState(() => _searchQuery = value),
-                    decoration: InputDecoration(
-                      hintText: 'Search for food or restaurant...',
-                      hintStyle: TextStyle(color: Colors.grey[400]),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: AppColors.textSecondary,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) =>
+                          setState(() => _searchQuery = value),
+                      decoration: const InputDecoration(
+                        hintText: 'Search for dishes, restaurants...',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Container(
+                    margin: const EdgeInsets.all(4),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: const StadiumBorder(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                      ),
+                      child: const Text('Search'),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 16),
-              Container(
-                height: 56,
-                width: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Icon(Icons.tune, color: AppColors.primary),
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildCategoryList() {
+  Widget _buildCategoryFilter() {
     final categories = ['All', ...DummyData.categories];
     // Map categories to basic icons for demo purposes
     final Map<String, IconData> icons = {
@@ -223,8 +216,9 @@ class _HomePageState extends State<HomePage> {
       'Biriyani': Icons.rice_bowl,
     };
 
-    return SizedBox(
-      height: 120,
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.only(bottom: 40),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
@@ -232,47 +226,38 @@ class _HomePageState extends State<HomePage> {
           final category = categories[index];
           final isSelected = _selectedCategory == category;
           return Padding(
-            padding: const EdgeInsets.only(right: 24),
-            child: GestureDetector(
+            padding: const EdgeInsets.only(right: 12),
+            child: InkWell(
               onTap: () => setState(() => _selectedCategory = category),
-              child: Column(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: 70,
-                    width: 70,
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: isSelected
-                              ? AppColors.primary.withOpacity(0.4)
-                              : Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.primary : Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: isSelected ? AppColors.primary : Colors.grey[300]!,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
                       icons[category] ?? Icons.fastfood,
+                      size: 18,
                       color: isSelected ? Colors.white : AppColors.textPrimary,
-                      size: 30,
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    category,
-                    style: TextStyle(
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.w500,
+                    const SizedBox(width: 8),
+                    Text(
+                      category,
+                      style: TextStyle(
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.textPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -282,16 +267,50 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildFoodSections() {
-    if (_selectedCategory != 'All') {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionHeader('$_selectedCategory Menu'),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40),
-            child: Wrap(
-              children: _filteredItems
+    // Similar to before but using Wrap for grid layout to display cards more nicely
+    List<FoodItem> itemsToShow = _filteredItems;
+
+    // Header
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Featured Items',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'View All',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+
+        // Grid
+        LayoutBuilder(
+          builder: (context, constraints) {
+            // Simple responsive grid logic
+            double cardWidth = 350;
+            int crossAxisCount = (constraints.maxWidth / cardWidth).floor();
+            if (crossAxisCount < 1) crossAxisCount = 1;
+
+            return Wrap(
+              spacing: 24,
+              runSpacing: 24,
+              children: itemsToShow
                   .map(
                     (item) => FoodCard(
                       foodItem: item,
@@ -300,65 +319,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   )
                   .toList(),
-            ),
-          ),
-        ],
-      );
-    }
-
-    // Show Featured Sections for "All"
-    return Column(
-      children: DummyData.categories.map((category) {
-        final itemsInCategory = _filteredItems
-            .where((item) => item.category == category)
-            .toList();
-        if (itemsInCategory.isEmpty) return const SizedBox.shrink();
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionHeader('Popular $category'),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
-              child: Row(
-                children: itemsInCategory
-                    .map(
-                      (item) => FoodCard(
-                        foodItem: item,
-                        onAdd: () => _addToCart(item),
-                        onBuy: () => _buyNow(item),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-            const SizedBox(height: 40),
-          ],
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'See all',
-            style: TextStyle(color: AppColors.primary),
-          ),
+            );
+          },
         ),
       ],
     );
