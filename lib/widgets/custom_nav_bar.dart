@@ -27,7 +27,7 @@ class CustomNavBar extends StatelessWidget {
                 // Logo
                 Row(
                   children: [
-                    Icon(Icons.restaurant, color: AppColors.primary, size: 32),
+                    Icon(Icons.food_bank, color: AppColors.primary, size: 32),
                     const SizedBox(width: 8),
                     Text(
                       'FoodieDelight',
