@@ -18,7 +18,7 @@ class CustomNavBar extends StatelessWidget {
       color: AppColors.surface,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(maxWidth: 2000),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Row(
@@ -42,45 +42,51 @@ class CustomNavBar extends StatelessWidget {
                 ),
 
                 // Menu Items (Web Style)
-                if (MediaQuery.of(context).size.width > 768)
-                  Row(
-                    children: [
-                      _NavBarItem(title: 'Home', isActive: true),
-                      _NavBarItem(title: 'Menu'),
-                      _NavBarItem(title: 'Offers'),
-                      _NavBarItem(title: 'Contact'),
-                    ],
-                  ),
 
                 // Cart
-                InkWell(
-                  onTap: onCartTap,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.shopping_cart,
-                          size: 24,
-                          color: AppColors.textPrimary,
+                Container(
+                  child: Row(
+                    children: [
+                      if (MediaQuery.of(context).size.width > 768)
+                        Row(
+                          children: [
+                            _NavBarItem(title: 'Home', isActive: true),
+                            _NavBarItem(title: 'Menu'),
+                            _NavBarItem(title: 'Offers'),
+                            _NavBarItem(title: 'Contact'),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          cartCount > 0 ? '$cartCount' : 'Cart',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
+                      InkWell(
+                        onTap: onCartTap,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.shopping_cart,
+                                size: 24,
+                                color: AppColors.textPrimary,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                cartCount > 0 ? '$cartCount' : 'Cart',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
