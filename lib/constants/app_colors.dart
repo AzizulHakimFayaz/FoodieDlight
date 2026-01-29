@@ -6,6 +6,7 @@ class AppColors {
   static const Color primaryLight = Color(
     0xFFFF80AB,
   ); // Lighter pink for accents
+  static const Color secondary = Color(0xFFFCE4EC); // Pink 50
   static const Color background = Color(0xFFFFF9F9); // Warm White/Pinkish
   static const Color surface = Colors.white;
 
