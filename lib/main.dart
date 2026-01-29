@@ -22,7 +22,24 @@ class FoodOrderingApp extends StatelessWidget {
           secondary: AppColors.secondary,
         ),
         scaffoldBackgroundColor: AppColors.background,
-        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
+            .copyWith(
+              displayLarge: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.bold,
+              ),
+              displayMedium: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.bold,
+              ),
+              headlineLarge: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.bold,
+              ),
+              headlineMedium: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.bold,
+              ),
+              titleLarge: GoogleFonts.playfairDisplay(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
         useMaterial3: true,
       ),
       home: const HomePage(),

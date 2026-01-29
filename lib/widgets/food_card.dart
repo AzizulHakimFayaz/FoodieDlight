@@ -18,175 +18,202 @@ class FoodCard extends StatefulWidget {
   State<FoodCard> createState() => _FoodCardState();
 }
 
-class _FoodCardState extends State<FoodCard> {
+class _FoodCardState extends State<FoodCard>
+    with SingleTickerProviderStateMixin {
   bool isHovered = false;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 10000),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 350, // Slightly wider for BiteDash style
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(isHovered ? 0.1 : 0.05),
-              blurRadius: isHovered ? 20 : 10,
-              offset: const Offset(0, 5),
+      onEnter: (_) {
+        setState(() => isHovered = true);
+        _controller.repeat();
+      },
+      onExit: (_) {
+        setState(() => isHovered = false);
+        _controller.stop();
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          // The Card Background (Lower z-index)
+          Container(
+            width: 280,
+            height: 320,
+            margin: const EdgeInsets.only(top: 60, bottom: 20, right: 20),
+            padding: const EdgeInsets.only(
+              top: 80,
+              left: 20,
+              right: 20,
+              bottom: 20,
             ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image Section
-            Stack(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(isHovered ? 0.3 : 0.05),
+                  blurRadius: isHovered ? 30 : 15,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+              border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
-                  child: Image.network(
-                    widget.foodItem.imageUrl,
-                    height: 220, // Taller image
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 220,
-                      color: Colors.grey[100],
-                      child: const Icon(
-                        Icons.fastfood,
-                        size: 50,
-                        color: Colors.grey,
+                Column(
+                  children: [
+                    Text(
+                      widget.foodItem.name,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 22,
+                        color: AppColors.textPrimary,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      widget.foodItem.category,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        letterSpacing: 1.5,
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 12),
+                    Text(
+                      widget.foodItem.description,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                Positioned(
-                  top: 16,
-                  right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '৳${widget.foodItem.price.toStringAsFixed(0)}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.star, color: AppColors.accent, size: 16),
-                        SizedBox(width: 4),
-                        Text(
-                          '4.8',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.4),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.add, color: Colors.white),
+                        onPressed: widget.onAdd,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
+          ),
 
-            Padding(
-              padding: const EdgeInsets.all(24.0), // More padding
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.foodItem.name,
-                          style: const TextStyle(
-                            fontSize: 20, // Larger title
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(
-                        '\$${widget.foodItem.price.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
-                        ),
+          // The Floating Plate Image (Higher z-index)
+          Positioned(
+            top: 0,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _controller.value * 2 * 3.14159,
+                  child: child,
+                );
+              },
+              child: Hero(
+                tag: widget.foodItem.id,
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.foodItem.description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                      height: 1.5,
+                    image: DecorationImage(
+                      image: NetworkImage(widget.foodItem.imageUrl),
+                      fit: BoxFit.cover,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    border: Border.all(color: Colors.white, width: 4),
                   ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: widget.onAdd,
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: AppColors.primary,
-                            side: const BorderSide(
-                              color: AppColors.primary,
-                              width: 1.5,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text(
-                            'Add to Cart',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: widget.onBuy,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child: const Text(
-                            'Buy Now',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
+                ),
+              ),
+            ),
+          ),
+
+          // Rating Badge
+          Positioned(
+            top: 20,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: const [
+                  Icon(Icons.star, color: AppColors.accent, size: 14),
+                  SizedBox(width: 4),
+                  Text(
+                    "4.8",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -125,7 +125,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   ),
                 ),
                 Text(
-                  '\$${item.foodItem.price.toStringAsFixed(2)}',
+                  '৳${item.foodItem.price.toStringAsFixed(0)}',
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
@@ -192,7 +192,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             ),
           ),
           Text(
-            '\$${amount.toStringAsFixed(2)}',
+            '৳${amount.toStringAsFixed(0)}',
             style: TextStyle(
               fontSize: isTotal ? 20 : 16,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
