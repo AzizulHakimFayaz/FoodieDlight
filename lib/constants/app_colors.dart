@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Modern Food Delivery Palette
-  static const Color primary = Color(0xFFFA4A0C); // Vermilion / Red-Orange
-  static const Color secondary = Color(0xFFF2F2F2); // Light Gray Background
-  static const Color background = Color(0xFFF6F6F9); // Very Light Blue/Gray
+  // Deep Raspberry / Cherry Palette
+  static const Color primary = Color(0xFFD6335C); // Deep Raspberry
+  static const Color primaryLight = Color(
+    0xFFFF80AB,
+  ); // Lighter pink for accents
+  static const Color background = Color(0xFFFFF9F9); // Warm White/Pinkish
   static const Color surface = Colors.white;
-  static const Color textPrimary = Color(0xFF000000);
-  static const Color textSecondary = Color(0xFF9A9A9D);
-  static const Color accent = Color(
-    0xFFFFC107,
-  ); // Amber/Gold for stars or highlights
-  static const Color success = Color(0xFF2E7D32);
-  static const Color error = Color(0xFFD32F2F);
+
+  static const Color textPrimary = Color(0xFF2D0C15); // Dark Brownish Black
+  static const Color textSecondary = Color(0xFF9E8990); // Muted Pinkish Grey
+
+  static const Color accent = Color(0xFFFFC107); // Gold for ratings
+
+  static const Color iconColor = Color(
+    0xFFE5B6C2,
+  ); // Faint pink for background icons
 }
